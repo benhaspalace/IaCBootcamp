@@ -47,8 +47,8 @@ resource "azurerm_windows_virtual_machine" "IaCBootcampVM01" {
   resource_group_name = azurerm_resource_group.IaCBootcampRG.name
   location            = azurerm_resource_group.IaCBootcampRG.location
   size                = "Standard_B2s"
-  admin_username      = "adminuser"
-  admin_password      = "P@$$w0rd1234!"
+  admin_username      = var.admin_username
+  admin_password      = var.admin_password
   network_interface_ids = [
     azurerm_network_interface.IaCBootcampVM01NIC.id,
   ]
