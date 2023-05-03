@@ -11,3 +11,8 @@ resource "azurerm_resource_group" "rg" {
 
   for_each = var.rgs
 }
+
+# Imported resource
+resource "azurerm_storage_account" "newsa" {
+    # Fill out with aztf export tool exported configuration
+}
