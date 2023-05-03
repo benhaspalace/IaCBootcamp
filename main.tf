@@ -1,12 +1,12 @@
 # Resource group
 resource "azurerm_resource_group" "IaCBootcampRG" {
-  name     = var.rgName
+  name     = "${local.prefix}-${var.rgName}-${local.suffix}"
   location = local.location
 }
 
 # Network interface card
-resource "azurerm_network_interface" "IaCBootcampVM01NIC" {
-  name                = "${var.vmNames[count.index]}-NIC"
+resource "azurerm_network_interface" "IaCBootcampVMNIC" {
+  name                = "${local.prefix}-${var.vmNames[count.index]}-NIC-${local.suffix}"
   location            = azurerm_resource_group.IaCBootcampRG.location
   resource_group_name = azurerm_resource_group.IaCBootcampRG.name
 
@@ -36,14 +36,14 @@ data "azurerm_key_vault_secret" "password" {
 
 # Virtual machine
 resource "azurerm_windows_virtual_machine" "IaCBootcampVM01" {
-  name                = var.vmNames[count.index]
+  name                = "${local.prefix}-${var.vmNames[count.index]}-${local.suffix}"
   resource_group_name = azurerm_resource_group.IaCBootcampRG.name
   location            = azurerm_resource_group.IaCBootcampRG.location
   size                = "Standard_B2s"
   admin_username      = data.azurerm_key_vault_secret.userName.value
   admin_password      = data.azurerm_key_vault_secret.password.value
   network_interface_ids = [
-    azurerm_network_interface.IaCBootcampVM01NIC[count.index].id
+    azurerm_network_interface.IaCBootcampVMNIC[count.index].id
   ]
 
   os_disk {
@@ -66,9 +66,9 @@ module "net" {
   source              = "./Modules/Networking"
   rgName              = azurerm_resource_group.IaCBootcampRG.name
   location            = azurerm_resource_group.IaCBootcampRG.location
-  VNetName            = var.VNetName
+  VNetName            = "${local.prefix}-${var.VNetName}-${local.suffix}"
   VNetAddressSpace    = local.VNetAddressSpace
-  subnetName          = var.subnetName
+  subnetName          = "${local.prefix}-${var.subnetName}-${local.suffix}}"
   subnetAddressPrefix = local.subnetAddressPrefix
 }
 
@@ -78,5 +78,5 @@ module "nsg" {
   location = azurerm_resource_group.IaCBootcampRG.location
   subnetId = module.net.subnetId
 
-  NSGName = var.NSGName
+  NSGName = "${local.prefix}-${var.NSGName}-${local.suffix}"
 }

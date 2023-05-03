@@ -4,8 +4,8 @@ variable "rgName" {
 
 variable "vmNames" {
   default = [
-    "IaCBootcampVM01",
-    "IaCBootcampVM02",
+    "VM01",
+    "VM02",
   ]
 }
 
