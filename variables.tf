@@ -1,31 +1,26 @@
-variable "subId" {
-  type = string
-}
-
-variable "clientId" {
-  type = string
-}
-
-variable "clientSecret" {
-  type = string
-}
-
-variable "tenant" {
-  type = string
-}
-
-variable "admin_username" {
-  type = string
-}
-
-variable "admin_password" {
-  type = string
-}
-
 variable "rgName" {
   type = string
 }
 
-variable "vmCount" {
-  type = number
+variable "vmNames" {
+  default = [
+    "IaCBootcampVM01",
+    "IaCBootcampVM02",
+  ]
+}
+
+variable "kvName" {
+  type = string
+}
+
+variable "kvRG" {
+  type = string
+}
+
+variable "userNameSecret" {
+  type = string
+}
+
+variable "passwordSecret" {
+  type = string
 }
