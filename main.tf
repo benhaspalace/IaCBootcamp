@@ -1,7 +1,7 @@
 # Resource group
 resource "azurerm_resource_group" "IaCBootcampRG" {
-  name     = "IaCBootcampRG"
-  location = "North Europe"
+  name     = var.rgName
+  location = local.location
 }
 
 #Network Security Group
