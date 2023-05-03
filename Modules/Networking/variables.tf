@@ -7,10 +7,6 @@ variable "rgName" {
   type = string
 }
 
-variable "NSGName" {
-  type = string
-}
-
 variable "VNetName" {
   type = string
 }
