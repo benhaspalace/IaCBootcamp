@@ -31,6 +31,10 @@ variable "location" {
   type = string
 }
 
+variable "NSGName" {
+  type = string
+}
+
 variable "subnetId" {
   type = string
 }

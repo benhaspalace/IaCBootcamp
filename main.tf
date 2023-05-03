@@ -66,10 +66,9 @@ module "net" {
   source              = "./Modules/Networking"
   rgName              = azurerm_resource_group.IaCBootcampRG.name
   location            = azurerm_resource_group.IaCBootcampRG.location
-  NSGName             = "IaCBootcampNSG"
-  VNetName            = "IaCBootcampVNet"
+  VNetName            = var.VNetName
   VNetAddressSpace    = local.VNetAddressSpace
-  subnetName          = "IaCBootcampSubnet01"
+  subnetName          = var.subnetName
   subnetAddressPrefix = local.subnetAddressPrefix
 }
 
@@ -78,4 +77,6 @@ module "nsg" {
   rgName   = azurerm_resource_group.IaCBootcampRG.name
   location = azurerm_resource_group.IaCBootcampRG.location
   subnetId = module.net.subnetId
+
+  NSGName = var.NSGName
 }

@@ -24,3 +24,15 @@ variable "userNameSecret" {
 variable "passwordSecret" {
   type = string
 }
+
+variable "NSGName" {
+  type = string
+}
+
+variable "VNetName" {
+  type = string
+}
+
+variable "subnetName" {
+  type = string
+}
