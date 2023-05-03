@@ -4,30 +4,6 @@ resource "azurerm_resource_group" "IaCBootcampRG" {
   location = local.location
 }
 
-#Network Security Group
-resource "azurerm_network_security_group" "IaCBootcampNSG" {
-  name                = "IaCBootcampNSG"
-  location            = azurerm_resource_group.IaCBootcampRG.location
-  resource_group_name = azurerm_resource_group.IaCBootcampRG.name
-}
-
-# Virtual network
-resource "azurerm_virtual_network" "IaCBootcampVNet" {
-  name                = "IaCBootcampVNet"
-  location            = azurerm_resource_group.IaCBootcampRG.location
-  resource_group_name = azurerm_resource_group.IaCBootcampRG.name
-  address_space       = ["10.0.0.0/16"]
-  dns_servers         = ["10.0.0.4", "10.0.0.5"]
-}
-
-# Subnet
-resource "azurerm_subnet" "IaCBootcampSubnet01" {
-  name                 = "IaCBootcampSubnet01"
-  resource_group_name  = azurerm_resource_group.IaCBootcampRG.name
-  virtual_network_name = azurerm_virtual_network.IaCBootcampVNet.name
-  address_prefixes     = ["10.0.1.0/24"]
-}
-
 # Network interface card
 resource "azurerm_network_interface" "IaCBootcampVM01NIC" {
   name                = "IaCBootcampVM01NIC"
@@ -36,7 +12,7 @@ resource "azurerm_network_interface" "IaCBootcampVM01NIC" {
 
   ip_configuration {
     name                          = "internal"
-    subnet_id                     = azurerm_subnet.IaCBootcampSubnet01.id
+    subnet_id                     = module.net.subnetId
     private_ip_address_allocation = "Dynamic"
   }
 }
@@ -74,4 +50,15 @@ resource "azurerm_windows_virtual_machine" "IaCBootcampVM01" {
     sku       = "2022-Datacenter"
     version   = "latest"
   }
+
+  count = length(var.vmNames)
+module "net" {
+  source              = "./Modules/Networking"
+  rgName              = azurerm_resource_group.IaCBootcampRG.name
+  location            = azurerm_resource_group.IaCBootcampRG.location
+  NSGName             = "IaCBootcampNSG"
+  VNetName            = "IaCBootcampVNet"
+  VNetAddressSpace    = local.VNetAddressSpace
+  subnetName          = "IaCBootcampSubnet01"
+  subnetAddressPrefix = local.subnetAddressPrefix
 }
