@@ -6,9 +6,11 @@ resource "azurerm_resource_group" "IaCBootcampRG" {
 
 # Network interface card
 resource "azurerm_network_interface" "IaCBootcampVM01NIC" {
-  name                = "IaCBootcampVM01NIC"
+  name                = "IaCBootcampVM01NIC-${var.vmNames[count.index]}}"
   location            = azurerm_resource_group.IaCBootcampRG.location
   resource_group_name = azurerm_resource_group.IaCBootcampRG.name
+
+  count = length(var.vmNames)
 
   ip_configuration {
     name                          = "internal"
@@ -17,26 +19,31 @@ resource "azurerm_network_interface" "IaCBootcampVM01NIC" {
   }
 }
 
-# Public IP
-resource "azurerm_public_ip" "pip1" {
-    name = ""
-    allocation_method = local.publicIpAllocation
-    resource_group_name = azurerm_resource_group.IaCBootcampRG.name
-    location = azurerm_resource_group.IaCBootcampRG.location
-    
-    count = var.vmCount
+data "azurerm_key_vault" "IaCBootCampKeyVault" {
+  name                = var.kvName
+  resource_group_name = var.kvRG
+}
+
+data "azurerm_key_vault_secret" "userName" {
+  name         = var.userNameSecret
+  key_vault_id = data.azurerm_key_vault.IaCBootCampKeyVault.id
+}
+
+data "azurerm_key_vault_secret" "password" {
+  name         = var.passwordSecret
+  key_vault_id = data.azurerm_key_vault.IaCBootCampKeyVault.id
 }
 
 # Virtual machine
 resource "azurerm_windows_virtual_machine" "IaCBootcampVM01" {
-  name                = "IaCBootcampVM01"
+  name                = var.vmNames[count.index]
   resource_group_name = azurerm_resource_group.IaCBootcampRG.name
   location            = azurerm_resource_group.IaCBootcampRG.location
   size                = "Standard_B2s"
-  admin_username      = var.admin_username
-  admin_password      = var.admin_password
+  admin_username      = data.azurerm_key_vault_secret.userName.value
+  admin_password      = data.azurerm_key_vault_secret.password.value
   network_interface_ids = [
-    azurerm_network_interface.IaCBootcampVM01NIC.id,
+    azurerm_network_interface.IaCBootcampVM01NIC[count.index].id
   ]
 
   os_disk {
@@ -52,6 +59,8 @@ resource "azurerm_windows_virtual_machine" "IaCBootcampVM01" {
   }
 
   count = length(var.vmNames)
+}
+
 module "net" {
   source              = "./Modules/Networking"
   rgName              = azurerm_resource_group.IaCBootcampRG.name
