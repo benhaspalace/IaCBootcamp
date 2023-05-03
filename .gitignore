@@ -36,3 +36,6 @@ terraform.rc
 
 #Ignore .terraform.lock.hcl files
 .terraform.lock.hcl
+
+# Ignore run file
+demo.ps1
