@@ -8,5 +8,17 @@ terraform {
 }
 
 provider "azurerm" {
-  features {}
+    alias = "prod"
+    subscription_id = var.subId
+    client_id = var.clientId
+    client_secret = var.clientSecret
+    tenant_id = var.tenant
+    features {
+        virtual_machine {
+            delete_os_disk_on_deletion = true
+        }
+        resource_group {
+            prevent_deletion_if_contains_resources = true
+        }
+    }
 }
