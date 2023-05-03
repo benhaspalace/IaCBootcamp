@@ -14,15 +14,3 @@ resource "azurerm_subnet" "IaCBootcampSubnet01" {
   virtual_network_name = azurerm_virtual_network.IaCBootcampVNet.name
   address_prefixes     = var.subnetAddressPrefix
 }
-
-#Network Security Group
-resource "azurerm_network_security_group" "IaCBootcampNSG" {
-  name                = var.NSGName
-  location            = var.location
-  resource_group_name = var.rgName
-}
-
-resource "azurerm_subnet_network_security_group_association" "IaCBootCampNSG-Subnet01" {
-  subnet_id                 = azurerm_subnet.IaCBootcampSubnet01.id
-  network_security_group_id = azurerm_network_security_group.IaCBootcampNSG.id
-}

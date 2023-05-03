@@ -6,7 +6,7 @@ resource "azurerm_resource_group" "IaCBootcampRG" {
 
 # Network interface card
 resource "azurerm_network_interface" "IaCBootcampVM01NIC" {
-  name                = "IaCBootcampVM01NIC-${var.vmNames[count.index]}}"
+  name                = "${var.vmNames[count.index]}-NIC"
   location            = azurerm_resource_group.IaCBootcampRG.location
   resource_group_name = azurerm_resource_group.IaCBootcampRG.name
 
@@ -47,6 +47,7 @@ resource "azurerm_windows_virtual_machine" "IaCBootcampVM01" {
   ]
 
   os_disk {
+    name                  = "${var.vmNames[count.index]}-OSDisk"
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
@@ -70,4 +71,11 @@ module "net" {
   VNetAddressSpace    = local.VNetAddressSpace
   subnetName          = "IaCBootcampSubnet01"
   subnetAddressPrefix = local.subnetAddressPrefix
+}
+
+module "nsg" {
+  source   = "./Modules/NSG"
+  rgName   = azurerm_resource_group.IaCBootcampRG.name
+  location = azurerm_resource_group.IaCBootcampRG.location
+  subnetId = module.net.subnetId
 }
