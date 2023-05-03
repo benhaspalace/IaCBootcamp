@@ -25,3 +25,7 @@ variable "admin_password" {
 variable "rgName" {
   type = string
 }
+
+variable "vmCount" {
+  type = number
+}

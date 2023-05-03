@@ -39,3 +39,6 @@ terraform.rc
 
 # Ignore run file
 demo.ps1
+
+# Ignore tfplan.json files
+*tfplan.json
