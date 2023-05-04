@@ -68,7 +68,7 @@ module "net" {
   location            = azurerm_resource_group.IaCBootcampRG.location
   VNetName            = "${local.prefix}-${var.VNetName}-${local.suffix}"
   VNetAddressSpace    = local.VNetAddressSpace
-  subnetName          = "${local.prefix}-${var.subnetName}-${local.suffix}}"
+  subnetName          = var.subnetName
   subnetAddressPrefix = local.subnetAddressPrefix
 }
 
@@ -79,4 +79,7 @@ module "nsg" {
   subnetId = module.net.subnetId
 
   NSGName = "${local.prefix}-${var.NSGName}-${local.suffix}"
+
+  # Use var.nsg_rules if it has elements else do not pass variable
+  nsg_rules = length(var.nsg_rules) > 0 ? var.nsg_rules : null
 }

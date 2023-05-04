@@ -1,5 +1,5 @@
 locals {
-  prefix = "IaCBootcamp"
+  prefix = "IaCBc"
   suffix   = "dev"
   
   location = "North Europe"
