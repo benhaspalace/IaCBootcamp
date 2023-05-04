@@ -12,6 +12,12 @@ resource "azurerm_storage_account" "IaCBootcampStorageAccount" {
   account_replication_type = "LRS"
 }
 
+resource "azurerm_storage_container" "IaCBootcampStorageContainer" {
+  name                  = "tfstate"
+  storage_account_name  = azurerm_storage_account.IaCBootcampStorageAccount.name
+  container_access_type = "private"
+}
+
 data "azurerm_client_config" "current" {}
 
 resource "azurerm_key_vault" "IaCBootcampKeyVault" {
