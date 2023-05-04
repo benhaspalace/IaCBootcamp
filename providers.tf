@@ -5,12 +5,13 @@ terraform {
       version = "~> 3.0"
     }
   }
-/*  backend "azurerm" {
-    resource_group_name  = var.backendRG
-    storage_account_name = var.storageaccount_name
+  backend "azurerm" {
+    # TODO: find an alternative way to use variables here (maybe ENV vars?)
+    resource_group_name  = "IaCBootcampBackendRG1"
+    storage_account_name = "iacbootcamptfstatesa01"
     container_name       = "tfstate"
     key                  = "terraform.tfstate"
-  } */
+  }
 }
 
 provider "azurerm" {
