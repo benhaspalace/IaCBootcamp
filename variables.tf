@@ -9,12 +9,19 @@ variable "vmNames" {
   ]
 }
 
-variable "kvName" {
+variable "backendRG" {
   type = string
+  default = "backendRG"
 }
 
-variable "kvRG" {
+variable "storageaccount_name" {
   type = string
+  default = "backendstorage"
+}
+
+variable "kvName" {
+  type = string
+  default = "keyvault"
 }
 
 variable "userNameSecret" {

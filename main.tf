@@ -21,7 +21,7 @@ resource "azurerm_network_interface" "IaCBootcampVMNIC" {
 
 data "azurerm_key_vault" "IaCBootCampKeyVault" {
   name                = var.kvName
-  resource_group_name = var.kvRG
+  resource_group_name = var.backendRG
 }
 
 data "azurerm_key_vault_secret" "userName" {
